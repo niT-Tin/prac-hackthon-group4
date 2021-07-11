@@ -13,11 +13,10 @@ type User struct {
 	gorm.Model
 	ID         int    `gorm:"primary_key" json:"id"`
 	UserName   string `json:"user_name"`
-	password   string
+	Password   string
 	AvatarUrl  string `json:"avatar_url"`
 	ActiveDays int    `json:"active_days"`
 	TextCount  int    `json:"text_count"`
-	TextId     int    `gorm:"unique" json:"text_id"`
 }
 
 type Text struct {
