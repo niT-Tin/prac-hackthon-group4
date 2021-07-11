@@ -15,9 +15,9 @@ type MySQLConfig struct {
 
 func InitMySqlDSN() string {
 	sqlConfig := MySQLConfig{
-		UserName:  "hackliu",
-		Password:  "Liu123321",
-		Host:      "rm-uf6i3ox1ocm68r52hco.mysql.rds.aliyuncs.com",
+		UserName:  "",
+		Password:  "",
+		Host:      "",
 		Port:      3306,
 		DB:        "hackthon",
 		Arguments: "charset=utf8mb4&parseTime=True",
