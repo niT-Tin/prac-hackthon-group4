@@ -1,20 +1,20 @@
 package util
 
 import (
-	"Group4/dao"
+	"Group4/models"
 	"errors"
 )
 
 // format the BRT aka Basic Return Type
 // fill the BRT flexibly
 
-func FormatBRT(a ...interface{}) dao.BRT {
+func FormatBRT(a ...interface{}) models.BRT {
 	if len(a) > 4 {
-		return dao.BRT{
+		return models.BRT{
 			ErrMsg: errors.New("arguments counts error"),
 		}
 	}
-	var bRT = dao.BRT{}
+	var bRT = models.BRT{}
 	for _, val := range a {
 		switch val.(type) {
 		case int64:
