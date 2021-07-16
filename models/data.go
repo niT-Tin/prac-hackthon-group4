@@ -2,11 +2,33 @@ package models
 
 import "gorm.io/gorm"
 
+// BRT stands for `Basic Return Type`
+
+type Rf func()
+
+type BRT struct {
+	Code   int64
+	Msg    string
+	ErrMsg error
+	B      bool
+	Token  string
+}
+
 type G4Data struct {
 	ErrorCode int    `json:"error_code"`
 	Message   string `json:"message"`
-	DataU     []User `json:"datau,omitempty"`
-	DataT     []Text `json:"datat,omitempty"`
+	Data      DataS  `json:"data"`
+}
+
+type DataS struct {
+	DataU []User `json:"datau,omitempty"`
+	DataT []Text `json:"datat,omitempty"`
+}
+
+type ModifyData struct {
+	UserName  string `json:"user_name"`
+	Password  string `json:"change_password"`
+	AvatarUrl string `json:"avatar_url"`
 }
 
 type User struct {
