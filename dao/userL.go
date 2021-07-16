@@ -2,39 +2,59 @@ package dao
 
 import (
 	"Group4/models"
+	"Group4/util"
 	"errors"
+	"fmt"
+	"gorm.io/gorm"
 )
 
 type User models.User
 
-func (User) Insert(user interface{}) (int64, error) {
-	user1 := user.(*User)
-	if create := mysqlDB.Model(user1).Create(user1); create.RowsAffected != 0 {
-		return create.RowsAffected, nil
+func IsExisted(UserName, Password string) bool {
+	u := &User{
+		UserName: UserName,
+		//Password: Password,
 	}
-	return 0, errors.New("create user error")
+	//u1 := dao.User{}
+	brt := u.Select()
+	if brt.ErrMsg != nil {
+		return false
+	}
+	if u.Password == Password {
+		return true
+	}
+	return false
 }
 
-func (User) Update(user interface{}) (int64, error) {
-	user1 := user.(*User)
-	if updates := mysqlDB.Model(user1).Where("user_name = ?", user1.UserName).Updates(user1); updates.RowsAffected != 0 {
-		return updates.RowsAffected, nil
+func NotExisted(UserName string) models.BRT {
+	str := fmt.Sprintf("%s doesn`t exist", UserName)
+	return models.BRT{
+		ErrMsg: errors.New(str),
 	}
-	return 0, errors.New("update user error")
 }
 
-func (User) Delete(user interface{}) (int64, error) {
-	user1 := user.(*User)
-	if deleted := mysqlDB.Where("user_name = ?", user1.UserName).Delete(user); deleted.RowsAffected != 0 {
-		return deleted.RowsAffected, nil
-	}
-	return 0, errors.New("delete user error")
+//type BRT models.BRT
+
+func (u *User) Insert() models.BRT {
+	return NoIf(mysqlDB.Model(u).Create(u), "create user error")
 }
 
-func (User) Select(user interface{}) (int64, error) {
-	user1 := user.(*User)
-	if selected := mysqlDB.Where("user_name = ?", user1.UserName).First(user); selected.RowsAffected != 0 {
-		return selected.RowsAffected, nil
+func (u *User) Update() models.BRT {
+	return NoIf(mysqlDB.Model(u).Where("user_name = ?", u.UserName).Updates(u), "update user error")
+}
+
+func (u *User) Delete() models.BRT {
+	return NoIf(mysqlDB.Model(u).Where("user_name = ?", u.UserName).Delete(u), "delete user error")
+}
+
+func (u *User) Select() models.BRT {
+	//user1 := user.(*User)
+	return NoIf(mysqlDB.Model(u).Where("user_name = ?", u.UserName).First(u), "select user error")
+}
+
+func NoIf(tx *gorm.DB, em string) models.BRT {
+	if tx.RowsAffected != 0 {
+		return util.FormatBRT(tx.RowsAffected)
 	}
-	return 0, errors.New("select user error")
+	return util.FormatBRT(errors.New(em))
 }
