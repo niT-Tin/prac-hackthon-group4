@@ -1,17 +1,18 @@
 package interfaces
 
-import "Group4/models"
+import (
+	"Group4/dao"
+	"Group4/models"
+)
 
 type User models.User
 
-//type Text models.Text
-
 // CRUD the basic interface of the CRUD
 type CRUD interface {
-	Insert(user interface{}) (int64, error)
-	Update(user interface{}) (int64, error)
-	Delete(user interface{}) (int64, error)
-	Select(user interface{}) (int64, error)
+	Insert() dao.BRT
+	Update() dao.BRT
+	Delete() dao.BRT
+	Select() dao.BRT
 }
 
 //type CRUDText interface {
